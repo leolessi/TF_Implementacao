@@ -1,6 +1,5 @@
 FROM postgres:14
 
-COPY init.sql /docker-entrypoint-initdb.d/
 
 ENV POSTGRES_DB=escola
 ENV POSTGRES_USER=faat
