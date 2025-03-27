@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 import Util.bd as bd
 
-
 app = Flask(__name__)
 
 
@@ -45,12 +44,13 @@ def cadastrar_turma():
     try:
         cursor.execute(
             """
-            INSERT INTO Turma (nome_turma, id_professor, horario) VALUES (%s, %s, %s)
+            INSERT INTO Turma (nome_turma, id_professor, horario)
+            VALUES (%s, %s, %s)
             """,
             (
                 data["nome_turma"],
                 data.get("id_professor"),
-                data["horarios"],
+                data["horario"],
             ),
         )
         conn.commit()
@@ -63,7 +63,7 @@ def cadastrar_turma():
         conn.close()
 
 
-@app.route("/turmas/<int:id_turma>", mmethods=["PUT"])
+@app.route("/turmas/<int:id_turma>", methods=["PUT"])
 def alterar_turma(id_turma):
     data = request.get_json()
     conn = bd.create_connection()
@@ -94,14 +94,14 @@ def alterar_turma(id_turma):
         conn.close()
 
 
-@app.route("/turmas/<int:turma>", methods=["DELETE"])
-def excluir_aluno(id_turma):
+@app.route("/turmas/<int:id_turma>", methods=["DELETE"])
+def excluir_turma(id_turma):
     conn = bd.create_connection()
     if conn is None:
         return jsonify({"error": "Failed to connect to the database"}), 500
     cursor = conn.cursor()
     try:
-        cursor.execute("DELETE FROM Turma WHERE id_aluno = %s", (id_turma,))
+        cursor.execute("DELETE FROM Turma WHERE id_turma = %s", (id_turma,))
         conn.commit()
         return jsonify({"message": "Turma excluída com sucesso"}), 200
     except Exception as e:
@@ -113,4 +113,4 @@ def excluir_aluno(id_turma):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
